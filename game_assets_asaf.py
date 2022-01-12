@@ -1,33 +1,52 @@
-'''Contains all the driver code for playing SpaceInvaders. Contains classes Bullet, Enemy, User and functions main and resetGameWindow'''
+#collecting e-waste space invaders game
 
+#imports
 import pygame
 from os.path import abspath, dirname
 import math
 import random
+import ctypes
+#imports
 
+#Paths
 BASE_PATH = abspath(dirname(__file__))
-IMAGE_PATH = BASE_PATH + '/assets/e_waste_images'
-MUSIC_PATH = BASE_PATH + '/assets/sounds/'
+IMAGE_PATH = BASE_PATH + '/assets/e_waste_images/'
+Sound_Path = BASE_PATH + '/assets/sounds/'
+#Paths
 
 pygame.init()
 
-astroid_number = 1
+user32 = ctypes.windll.user32
+SIZE_W = user32.GetSystemMetrics(78)
+SIZE_H = user32.GetSystemMetrics(79)
+SIZE = width, height = SIZE_W, SIZE_H
 
+#settings
 #SCREEN HEIGHT AND SCREEN WIDTH
-s_width = 800
-s_height = 800
-window = pygame.display.set_mode((800, 800))
+s_width = SIZE_W
+s_height = SIZE_H
+window = pygame.display.set_mode(SIZE)
 
+# IMG_NAMES = ['spaceship','astroid','background']
 IMG_NAMES = ['spaceship', 'astroid1','astroid2','astroid3','astroid4','astroid5',
             'astroid6','astroid7','astroid8','astroid9','astroid10','background']
-
 
 IMAGES = {name: pygame.image.load(IMAGE_PATH + '{}.png'.format(name)).convert_alpha()
         for name in IMG_NAMES}
 
 BACKGROUND = IMAGES['background']
 SPACESHIP = IMAGES['spaceship']
-ASTEROID = IMAGES['asteroid{}'.format(random.randint(1,10))]
+# ASTEROID = IMAGES['asteroid']
+ASTROID1 = IMAGES['astroid1']
+ASTROID2 = IMAGES['astroid2']
+ASTROID3 = IMAGES['astroid3']
+ASTROID4 = IMAGES['astroid4']
+ASTROID5 = IMAGES['astroid5']
+ASTROID6 = IMAGES['astroid6']
+ASTROID7 = IMAGES['astroid7']
+ASTROID8 = IMAGES['astroid8']
+ASTROID9 = IMAGES['astroid9']
+ASTROID10 = IMAGES['astroid10']
 
 SHOOT = pygame.mixer.Sound('assets/sounds/shoot.wav')
 BANG = pygame.mixer.Sound('assets/sounds/bang.wav')
@@ -149,8 +168,8 @@ class User(object):
         self.image = SPACESHIP
         self.width = self.image.get_width()
         self.height = self.image.get_height()
-        self.x = s_width // 2
-        self.y = s_height // 2
+        self.x = s_width // 10
+        self.y = s_height // 10
         self.angle = 0
         self.rotatedSurface = pygame.transform.rotate(self.image, self.angle)
         self.rotatedRect = self.rotatedSurface.get_rect()
@@ -237,7 +256,11 @@ class Enemy(object):
     """
     def __init__(self):
         astroid_number = random.randint(1,10)
-        self.image = IMAGES['asteroid'.format(astroid_number)]
+        # self.image = IMAGES['asteroid{}'].format(astroid_number)
+        # self.image = IMAGES['asteroid']
+        Astroid_Path = IMAGE_PATH + 'asteroid{}.png'.format(astroid_number)
+        self.image = pygame.image.load("assets/e_waste_images/astroid{}.png".format(astroid_number))
+
         self.width = 50
         self.height = 50
         self.random_point = random.choice([(random.randrange(0, s_width-self.width), random.choice([-1*self.height - 5, s_height + 5])), (random.choice([-1*self.width - 5, s_width + 5]), random.randrange(0, s_height - self.height))])
