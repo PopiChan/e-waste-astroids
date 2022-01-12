@@ -4,21 +4,22 @@ import pygame
 from os.path import abspath, dirname
 import math
 import random
+
 BASE_PATH = abspath(dirname(__file__))
-IMAGE_PATH = BASE_PATH + '/assets/images/'
+IMAGE_PATH = BASE_PATH + '/assets/e_waste_images'
+MUSIC_PATH = BASE_PATH + '/assets/sounds/'
 
 pygame.init()
 
+astroid_number = 1
 
 #SCREEN HEIGHT AND SCREEN WIDTH
 s_width = 800
 s_height = 800
-IMAGE_PATH = BASE_PATH + '/assets/images/'
-MUSIC_PATH = BASE_PATH + '/assets/sounds/'
 window = pygame.display.set_mode((800, 800))
 
-IMG_NAMES = ['spaceship', 'asteroid',
-            'background']
+IMG_NAMES = ['spaceship', 'astroid1','astroid2','astroid3','astroid4','astroid5',
+            'astroid6','astroid7','astroid8','astroid9','astroid10','background']
 
 
 IMAGES = {name: pygame.image.load(IMAGE_PATH + '{}.png'.format(name)).convert_alpha()
@@ -26,7 +27,7 @@ IMAGES = {name: pygame.image.load(IMAGE_PATH + '{}.png'.format(name)).convert_al
 
 BACKGROUND = IMAGES['background']
 SPACESHIP = IMAGES['spaceship']
-ASTEROID = IMAGES['asteroid']
+ASTEROID = IMAGES['asteroid{}'.format(random.randint(1,10))]
 
 SHOOT = pygame.mixer.Sound('assets/sounds/shoot.wav')
 BANG = pygame.mixer.Sound('assets/sounds/bang.wav')
@@ -35,7 +36,7 @@ BANG = pygame.mixer.Sound('assets/sounds/bang.wav')
 
 
 
-pygame.display.set_caption('Space Invaders')
+pygame.display.set_caption('space waste')
 
 clock = pygame.time.Clock()
 
@@ -235,7 +236,8 @@ class Enemy(object):
         Draws the enemy onto the main screen
     """
     def __init__(self):
-        self.image = IMAGES['asteroid']
+        astroid_number = random.randint(1,10)
+        self.image = IMAGES['asteroid'.format(astroid_number)]
         self.width = 50
         self.height = 50
         self.random_point = random.choice([(random.randrange(0, s_width-self.width), random.choice([-1*self.height - 5, s_height + 5])), (random.choice([-1*self.width - 5, s_width + 5]), random.randrange(0, s_height - self.height))])
