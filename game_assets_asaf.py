@@ -20,12 +20,14 @@ user32 = ctypes.windll.user32
 SIZE_W = user32.GetSystemMetrics(78)
 SIZE_H = user32.GetSystemMetrics(79)
 SIZE = width, height = SIZE_W, SIZE_H
+astroid_location = 0,0
 
 #settings
 #SCREEN HEIGHT AND SCREEN WIDTH
 s_width = SIZE_W
 s_height = SIZE_H
-window = pygame.display.set_mode(SIZE)
+window = pygame.display.set_mode((SIZE), pygame.FULLSCREEN)
+# window = pygame.display.set_mode(SIZE)
 
 # IMG_NAMES = ['spaceship','astroid','background']
 IMG_NAMES = ['spaceship', 'astroid1','astroid2','astroid3','astroid4','astroid5',
@@ -306,6 +308,8 @@ def main():
     userBullets = []
     global asteroids
     asteroids = []
+    global parts
+    parts = []
     global count
     count = 0
     global run
