@@ -6,7 +6,12 @@ from os.path import abspath, dirname
 import math
 import random
 import ctypes
+import time
 #imports
+
+#Start screen Loop
+done = False
+start_time = pygame.time.get_ticks()
 
 #Paths
 BASE_PATH = abspath(dirname(__file__))
@@ -52,7 +57,10 @@ SHOOT = pygame.mixer.Sound('assets/sounds/shoot.wav')
 BANG = pygame.mixer.Sound('assets/sounds/bang.wav')
 
 
-
+def create_font(t,s=45,c=(0,0,0), b=True,i=False):
+    font = pygame.font.SysFont("Arial", s, bold=b, italic=i)
+    text = font.render(t, True, c)
+    return text
 
 
 pygame.display.set_caption('space waste')
@@ -278,12 +286,23 @@ class Enemy(object):
     def draw(self, window):
         window.blit(self.image, (self.x, self.y))    
 
+def gameOverScreen():
+    seconds_survived = (pygame.time.get_ticks() - start_time) // 1000
+    # seconds_survived = (end_time - start_time) // 1000
+    return round(seconds_survived)
+
 def resetGameWindow():
     '''Resets the game window with enemies and spaceship reset to the start of the gameloop if the game ends, returns nothing'''
     window.blit(BACKGROUND, (0,0))
     font = pygame.font.SysFont('arial', 30)
     no_of_lives = font.render('Lives : '+ str(lives), 1, (255,255,255))
-    play_again = font.render('Do you want to play again?? Press Space to play again',1,(255,255,255))
+    s = pygame.Surface((s_width,s_height))  # the size of your rect
+    s.set_alpha(128)                # alpha level
+    s.fill((255,0,0))           # this fills the entire surface
+    # play_again = font.render('Do you want to play again?? Press Space to play again',10,(0,0,0))
+    play_again = create_font('Do you want to play again?? Press Space to play again')
+    end_score = create_font('Your Score : ' + str(score))
+    time_alive = create_font('Time Alive : ' + str(gameOverScreen()) + ' seconds')
     total_score = font.render('Score: ' + str(score),1,(255,255,255))
     user.draw(window)
     for asteroid in asteroids:
@@ -294,7 +313,11 @@ def resetGameWindow():
     window.blit(no_of_lives,(25,25))
     window.blit(total_score, (25,75))
     if gameover:
-        window.blit(play_again, (s_width//2-play_again.get_width()//2, s_height//2 - play_again.get_height()//2))
+        end = time.time()
+        window.blit(s, (0,0))
+        window.blit(play_again, (s_width//2-play_again.get_width()//2, s_height//2 - s_height//10*2 - play_again.get_height()//2))
+        window.blit(end_score, (s_width//2-end_score.get_width()//2, s_height//2 - s_height//10*1 - end_score.get_height()//2))
+        window.blit(time_alive, (s_width//2-time_alive.get_width()//2, s_height//2 - s_height//10*3 - time_alive.get_height()//2))
     pygame.display.update()
 
 
@@ -353,6 +376,7 @@ def main():
                         BANG.play()
 
             if lives <= 0:
+                end_time = pygame.time.get_ticks()
                 gameover = True
 
 
